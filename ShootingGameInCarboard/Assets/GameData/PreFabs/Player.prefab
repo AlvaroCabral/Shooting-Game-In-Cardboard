@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &5822689358027882347
 Transform:
@@ -47,7 +47,7 @@ MonoBehaviour:
   raycastMode: 0
   overridePointerCamera: {fileID: 0}
   drawDebugRays: 0
-  maxReticleDistance: 20
+  maxReticleDistance: 40
   reticleSegments: 20
   reticleGrowthSpeed: 8
   reticleSortingOrder: 32767
@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 5822689358835606001}
   - component: {fileID: 5822689358835606000}
   - component: {fileID: 5822689358835606003}
+  - component: {fileID: 1268026798}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -151,6 +152,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletObject: {fileID: 140881531150407027, guid: 246abab08ea10734fbff5dbdf794f030,
     type: 3}
+  TxtScore: {fileID: 0}
+--- !u!65 &1268026798
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5822689358835606006}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.68858385}
+  m_Center: {x: 0, y: 0, z: -0.022243977}
 --- !u!1 &5822689358936704002
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,14 +280,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5822689359754286255}
-  m_LocalRotation: {x: -0.008722395, y: -0.030537384, z: -0.00026649353, w: 0.9994956}
+  m_LocalRotation: {x: -0.008723475, y: -0.02617593, z: -0.00022843199, w: 0.9996193}
   m_LocalPosition: {x: 0.3, y: -0.12199998, z: 0.344}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5822689358936704029}
   m_Father: {fileID: 5822689359900774524}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -1, y: -3.5, z: 0}
+  m_LocalEulerAnglesHint: {x: -1, y: -3, z: 0}
 --- !u!1 &5822689359900774499
 GameObject:
   m_ObjectHideFlags: 0

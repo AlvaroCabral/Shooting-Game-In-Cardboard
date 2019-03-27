@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class healthBar : MonoBehaviour
 {
     public Image ImgHealthBar;
-
-    public Text TxtHealthBar;
-
+    public TextMeshProUGUI TxtHealthBar;
     public int Min, Max;
-
     private int CurrentValue;
 
     private float CurrentPercentage;
@@ -48,7 +46,7 @@ public class healthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetHealth(80);
+        SetHealth(100);
     }
 
     // Update is called once per frame

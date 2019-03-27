@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GamePlay : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class GamePlay : MonoBehaviour
     float ratio = 5;
     float ratioHeight = 3;
     
+
+    int Score = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,9 +27,18 @@ public class GamePlay : MonoBehaviour
         Instantiate(EnemyObject, position,transform.rotation);
     }
 
+
+
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void UpdateScore()
+    {
+        Score += 1;
+        TextMeshProUGUI TxtScore = GameObject.Find("Score_Number").GetComponent<TextMeshProUGUI>();
+        TxtScore.text = string.Format("{0}", Score);
     }
 }

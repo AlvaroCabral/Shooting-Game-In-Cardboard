@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4816205617104086885}
   m_Layer: 0
   m_Name: Enemy 1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -88,7 +88,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4816205617104086895}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -139,6 +139,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BloodPrefab: {fileID: 4332596650361994642, guid: 0328fed2e7b38eb4fa750718d1dfd72a,
     type: 3}
+  gamePlay: {fileID: 4800988174451712787, guid: 64a2c3eadfc242e4cb2c5dd03fa87cb9,
+    type: 3}
+  MoveSpeed: 2
   Materials:
   - {fileID: 2100000, guid: 68b9277764a7dbb4980dd88f3ae57e1f, type: 2}
   - {fileID: 2100000, guid: 354153c05344dad4d894ffeb1b370649, type: 2}

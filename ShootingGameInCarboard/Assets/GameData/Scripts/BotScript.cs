@@ -7,7 +7,9 @@ public class BotScript : MonoBehaviour
 {
 
     public GameObject BloodPrefab;
+    public GamePlay gamePlay;
 
+    public float MoveSpeed = 2.0f;
     //Change Bot Material Variables
     public Material[] Materials;
     int MaterialIndex = 0;
@@ -16,15 +18,15 @@ public class BotScript : MonoBehaviour
     //Bot Life Variables
     int life = 100;
     private float maxHitpoint = 100;
-   
-    int currentWP = 0;
-    float rotSpeed = 2.2f;
-    float speed = 1.5f;
-    float accuracyWP = 5.0f;
-    float maxTimer;
-    int i = 0;
-    float timer;
-    bool timerOn;
+
+    //Bot Move Variables
+    private Vector3 startPoint;
+    private Vector3 endPoint;
+
+    private float distance= 30f;
+
+    private float lerptime = 5;
+    private GameObject Player;
 
     // Start is called before the first frame update
     void Start()
@@ -32,13 +34,17 @@ public class BotScript : MonoBehaviour
         Rend = GetComponent<Renderer>();
         Rend.enabled = true;
         Rend.sharedMaterial = Materials[MaterialIndex];
-        
+
+        Player = GameObject.Find("Player");
+        startPoint = this.transform.position;
+        endPoint = Player.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        this.transform.position = Vector3.MoveTowards(this.transform.position, Player.transform.position, MoveSpeed * Time.deltaTime);
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -54,6 +60,7 @@ public class BotScript : MonoBehaviour
             //Check bot life and destroy if less than 1
             if (life < 1)
             {
+                gamePlay.UpdateScore();
                 Destroy(gameObject);
             }
 
@@ -75,15 +82,12 @@ public class BotScript : MonoBehaviour
         }
     }
 
- 
-
     private void BloodlSplater(Collider collider)
     {
         GameObject Blood = GameObject.Instantiate(BloodPrefab, collider.transform.position, collider.transform.rotation.normalized) as GameObject;
         Destroy(Blood, 2);
     }
-    
-
+  
     private void ChangeMaterial()
     {
         Debug.Log("ChangeMaterial");
