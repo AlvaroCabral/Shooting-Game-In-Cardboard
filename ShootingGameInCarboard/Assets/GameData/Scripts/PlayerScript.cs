@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -9,19 +10,23 @@ public class PlayerScript : MonoBehaviour
     public GameObject DamagePanel;
     public Image Damage;
     public healthBar healthBarScript;
+    public AudioClip CollisionSound;
+    public AudioClip ScoreSound, PerfectSound;
     GameObject BulletSpawn;
+    AudioSource Sound;
 
     int life = 100;
     float DamagePanelTransparency = 0.7f;
     bool DamageCheck = false;
-    private void Awake()
-    {
-        
-    }
+    string oldScore;
+    TextMeshProUGUI TxtScore;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Sound = GetComponent<AudioSource>();
+        TxtScore = GameObject.Find("Score_Number").GetComponent<TextMeshProUGUI>();
+        oldScore = TxtScore.text;
     }
 
     // Update is called once per frame
@@ -30,8 +35,15 @@ public class PlayerScript : MonoBehaviour
 
         if (DamageCheck)
         {
-            DamagePanel.SetActive(true);
             ShowDamage();
+        }
+
+        Debug.Log(oldScore + ":" + TxtScore.text);
+        if(oldScore != TxtScore.text)
+        {
+            PlayScoreSound();
+            oldScore = TxtScore.text;
+
         }
     }
 
@@ -73,8 +85,6 @@ public class PlayerScript : MonoBehaviour
                 //Destroy(gameObject);
             }
 
-            Debug.Log("Enemy");
-
             //Destroy Bullet aftere colide
             Destroy(other.gameObject); // destroy object 
         }
@@ -85,22 +95,34 @@ public class PlayerScript : MonoBehaviour
         life -= damage;
         DamageCheck = true;
         healthBarScript.SetHealth(life);
+        Sound.PlayOneShot(CollisionSound);
     }
 
     void ShowDamage()
     {
+        DamagePanel.SetActive(true);
         var tempColor = Damage.color;
         tempColor.a = DamagePanelTransparency; //1f makes it fully visible, 0f makes it fully transparent.
         Damage.color = tempColor;
         if(DamagePanelTransparency > 0)
         {
-            Debug.Log("changetransparebcy");
             DamagePanelTransparency -= 0.01f;
         }
         else
         {
             DamageCheck = false;
+            DamagePanel.SetActive(false);
         }
+    }
+
+    void PlayScoreSound()
+    {
+        Sound.PlayOneShot(ScoreSound);
+    }
+
+    public void PlayPerfectSound()
+    {
+        Sound.PlayOneShot(PerfectSound);
     }
 
 }

@@ -6,33 +6,51 @@ using TMPro;
 public class GamePlay : MonoBehaviour
 {
     public GameObject EnemyObject;
-    public int max;
+    public PlayerScript PlayerS;
+    public float ratio = 5;
+    public float maxRange;
+    public float minRange;
 
-    float ratio = 5;
-    float ratioHeight = 3;
-    
 
     int Score = 0;
 
+    float ScoreFontSize = 40;
+    bool ScorePerfect = false;
 
     // Start is called before the first frame update
     void Start()
-    {   
-        //Get Position Values
-        float x = transform.position.x;
-        float y = transform.position.y;
-        float z = transform.position.z;
+    {
+        float spawnTime = 1;
+        float spawnDelay = Random.Range(3, 7);
+        InvokeRepeating("CreateNewEnemy", spawnTime, spawnDelay);
 
-        Vector3 position = new Vector3(Random.Range(x + ratio, x + ratio + max), 1, 0);
-        Instantiate(EnemyObject, position,transform.rotation);
     }
-
-
-
     // Update is called once per frame
     void Update()
     {
-        
+        if (ScorePerfect)
+        {
+            AnimatePerfectScore();
+        }
+
+    }
+
+    void CreateNewEnemy()
+    {
+        //Create New Position and instatiate new object(enemy)
+        Vector3 position = new Vector3(randomOffSetRadius(), Random.Range(1, 7), randomOffSetRadius());
+        Instantiate(EnemyObject, position, transform.rotation);
+    }
+
+    // Create a random point between a range and out of the ratio inside the range;
+    float randomOffSetRadius()
+    {
+        float num = Random.Range(minRange, maxRange);
+        if ((num > (0 - ratio)) && (num < ratio))
+        {
+            num = randomOffSetRadius();
+        }
+        return num;
     }
 
     public void UpdateScore()
@@ -40,5 +58,28 @@ public class GamePlay : MonoBehaviour
         Score += 1;
         TextMeshProUGUI TxtScore = GameObject.Find("Score_Number").GetComponent<TextMeshProUGUI>();
         TxtScore.text = string.Format("{0}", Score);
+
+        float perfect = Score % 10;
+        if(perfect == 0)
+        {
+            ScorePerfect = true;
+            TxtScore.fontSize = 100;
+            PlayerS.PlayPerfectSound();
+        }
+    }
+
+    void AnimatePerfectScore()
+    {
+
+        TextMeshProUGUI TxtScore = GameObject.Find("Score_Number").GetComponent<TextMeshProUGUI>();
+        
+        if (TxtScore.fontSize > ScoreFontSize)
+        {
+            TxtScore.fontSize = TxtScore.fontSize - 1;
+        }
+        else
+        {
+            ScorePerfect = false;
+        }
     }
 }

@@ -7,9 +7,9 @@ public class BotScript : MonoBehaviour
 {
 
     public GameObject BloodPrefab;
-    public GamePlay gamePlay;
+    GamePlay gamePlay;
 
-    public float MoveSpeed = 2.0f;
+    float MoveSpeed;
     //Change Bot Material Variables
     public Material[] Materials;
     int MaterialIndex = 0;
@@ -24,13 +24,13 @@ public class BotScript : MonoBehaviour
     private Vector3 endPoint;
 
     private float distance= 30f;
-
-    private float lerptime = 5;
     private GameObject Player;
-
+    
     // Start is called before the first frame update
     void Start()
     {
+        MoveSpeed = Random.Range(1f, 2f);
+
         Rend = GetComponent<Renderer>();
         Rend.enabled = true;
         Rend.sharedMaterial = Materials[MaterialIndex];
@@ -60,11 +60,13 @@ public class BotScript : MonoBehaviour
             //Check bot life and destroy if less than 1
             if (life < 1)
             {
+                gamePlay = GameObject.Find("GamePlay").GetComponent<GamePlay>();
                 gamePlay.UpdateScore();
                 Destroy(gameObject);
             }
 
             //Destroy Bullet aftere colide
+            
             Destroy(other.gameObject); // destroy object 
         }
     }

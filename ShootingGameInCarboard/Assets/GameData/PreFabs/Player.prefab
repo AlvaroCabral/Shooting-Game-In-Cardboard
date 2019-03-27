@@ -152,7 +152,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletObject: {fileID: 140881531150407027, guid: 246abab08ea10734fbff5dbdf794f030,
     type: 3}
-  TxtScore: {fileID: 0}
+  DamagePanel: {fileID: 0}
+  Damage: {fileID: 0}
+  healthBarScript: {fileID: 0}
+  CollisionSound: {fileID: 8300000, guid: 1cd7f6025d519364ebe13094f7a3ac26, type: 3}
 --- !u!65 &1268026798
 BoxCollider:
   m_ObjectHideFlags: 0
