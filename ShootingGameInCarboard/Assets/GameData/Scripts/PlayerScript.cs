@@ -6,12 +6,14 @@ using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
-    public GameObject BulletObject;
+    public GameObject[] BulletObjects;
     public GameObject DamagePanel;
+    public GameObject GunSmoke;
     public Image Damage;
     public healthBar healthBarScript;
     public AudioClip CollisionSound;
-    public AudioClip ScoreSound, PerfectSound;
+    public AudioClip ScoreSound, PerfectSound,GameOverSound,GunReloadSound;
+    GamePlay gamePlay;
     GameObject BulletSpawn;
     AudioSource Sound;
 
@@ -20,6 +22,9 @@ public class PlayerScript : MonoBehaviour
     bool DamageCheck = false;
     string oldScore;
     TextMeshProUGUI TxtScore;
+    Color OldColor;
+
+    private bool gamePlayCheck = true;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +32,7 @@ public class PlayerScript : MonoBehaviour
         Sound = GetComponent<AudioSource>();
         TxtScore = GameObject.Find("Score_Number").GetComponent<TextMeshProUGUI>();
         oldScore = TxtScore.text;
+        OldColor = Damage.color;
     }
 
     // Update is called once per frame
@@ -37,8 +43,6 @@ public class PlayerScript : MonoBehaviour
         {
             ShowDamage();
         }
-
-        Debug.Log(oldScore + ":" + TxtScore.text);
         if(oldScore != TxtScore.text)
         {
             PlayScoreSound();
@@ -49,23 +53,28 @@ public class PlayerScript : MonoBehaviour
 
     public void Fire()
     {
-        BulletSpawn = GameObject.Find("BulletSpawn");
+        if (gamePlayCheck)
+        {
+            BulletSpawn = GameObject.Find("BulletSpawn");
+            // Create the Bullet from the Bullet Prefab
+            int bulletIndex = Random.Range(0, 3);
+            GameObject bullet = Instantiate(
+                this.BulletObjects[bulletIndex],
+                this.BulletSpawn.transform.position,
+                this.BulletSpawn.transform.rotation);
 
-        // Create the Bullet from the Bullet Prefab
-        Debug.Log(BulletSpawn);
-        GameObject bullet = Instantiate(
-            this.BulletObject,
-            this.BulletSpawn.transform.position,
-            this.BulletSpawn.transform.rotation);
+            GameObject Blood = GameObject.Instantiate(GunSmoke, BulletSpawn.transform.position, BulletSpawn.transform.rotation.normalized) as GameObject;
+            Destroy(Blood, 2);
 
-        bullet.GetComponent<Transform>().rotation = Quaternion.Euler(0, 0, 90);
-        // Add velocity to the bullet
-        bullet.GetComponent<Rigidbody>().useGravity = false;
-        bullet.GetComponent<Rigidbody>().velocity = BulletSpawn.transform.forward * 5;
+            bullet.GetComponent<Transform>().rotation = Quaternion.Euler(0, 0, 90);
+            // Add velocity to the bullet
+            bullet.GetComponent<Rigidbody>().useGravity = false;
+            bullet.GetComponent<Rigidbody>().velocity = BulletSpawn.transform.forward * 5;
 
 
-        // Destroy the bullet after 2 seconds
-        Destroy(bullet, 6.0f);
+            // Destroy the bullet after 2 seconds
+            Destroy(bullet, 6.0f);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -73,7 +82,7 @@ public class PlayerScript : MonoBehaviour
         if (other.tag == "Enemy")
         {
             //Take Damage from Bullet
-            damageHealth(10);
+            UpdateHealth(-10);
 
             //Show blood after bullet colision
             //BloodlSplater(other);
@@ -81,18 +90,33 @@ public class PlayerScript : MonoBehaviour
             //Check bot life and destroy if less than 1
             if (life < 1)
             {
-                
+                gamePlay = GameObject.Find("GamePlay").GetComponent<GamePlay>();
+                gamePlay.GameOver();
+                Sound.PlayOneShot(GameOverSound);
                 //Destroy(gameObject);
             }
 
-            //Destroy Bullet aftere colide
-            Destroy(other.gameObject); // destroy object 
+            
         }
+        if (other.tag == "BulletReload")
+        {
+            Sound.PlayOneShot(GunReloadSound);
+        }
+        if (other.tag == "Reward")
+        {
+            UpdateHealth(10);
+        }
+        //Destroy Bullet aftere colide
+        Destroy(other.gameObject); // destroy object 
     }
 
-    void damageHealth(int damage)
+    void UpdateHealth(int damage)
     {
-        life -= damage;
+        life += damage;
+        if(life > 100)
+        {
+            life = 100;
+        }
         DamageCheck = true;
         healthBarScript.SetHealth(life);
         Sound.PlayOneShot(CollisionSound);
@@ -100,6 +124,7 @@ public class PlayerScript : MonoBehaviour
 
     void ShowDamage()
     {
+        Debug.Log("Show damage");
         DamagePanel.SetActive(true);
         var tempColor = Damage.color;
         tempColor.a = DamagePanelTransparency; //1f makes it fully visible, 0f makes it fully transparent.
@@ -112,6 +137,8 @@ public class PlayerScript : MonoBehaviour
         {
             DamageCheck = false;
             DamagePanel.SetActive(false);
+            Damage.color = OldColor;
+            DamagePanelTransparency = 0.7f;
         }
     }
 
@@ -123,6 +150,11 @@ public class PlayerScript : MonoBehaviour
     public void PlayPerfectSound()
     {
         Sound.PlayOneShot(PerfectSound);
+    }
+
+    public void ChangeGameStatus(bool status)
+    {
+        gamePlayCheck = status;
     }
 
 }

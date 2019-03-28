@@ -33,25 +33,9 @@ public class healthBar : MonoBehaviour
             ImgHealthBar.fillAmount = CurrentPercentage;
         }
     }
-
-    public float GetCurrentValue
-    {
-        get { return CurrentValue; }
-    }
-
-    public float GetCurrentPercentage
-    {
-        get { return CurrentPercentage;  }
-    }
     // Start is called before the first frame update
     void Start()
     {
         SetHealth(100);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
